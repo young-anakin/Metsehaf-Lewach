@@ -1,4 +1,5 @@
-﻿using LewachBookTrading.DTOs.UserDTO;
+﻿using LewachBookTrading.DTOs.FriendDTO;
+using LewachBookTrading.DTOs.UserDTO;
 using LewachBookTrading.Model;
 
 namespace LewachBookTrading.Services.UserService
@@ -9,7 +10,7 @@ namespace LewachBookTrading.Services.UserService
         Task<string> ChangePassword(ChangePasswordDTO DTO);
         Task<User> DeleteUser(int id);
         Task<List<User>> GetAllUsers();
-        Task<User> GetUser(int id);
+        Task<DisplayUserDTO> GetUser(int id);
         Task<User> UpdateUser(UpdateUserDTO DTO);
     }
 }

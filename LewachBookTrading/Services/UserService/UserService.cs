@@ -1,5 +1,6 @@
 ﻿using DentalClinic.Services.Tools;
 using LewachBookTrading.Context;
+using LewachBookTrading.DTOs.FriendDTO;
 using LewachBookTrading.DTOs.UserDTO;
 using LewachBookTrading.Model;
 using Microsoft.EntityFrameworkCore;
@@ -63,20 +64,56 @@ namespace LewachBookTrading.Services.UserService
             return null;
 
         }
-        public async Task<User> GetUser(int id)
+        public async Task<DisplayUserDTO> GetUser(int id)
         {
+            // Fetch the user and include their friends
             var user = await _context.Users
-                .Include(u => u.Journals)
-                .Include(u => u.JournalTags)
-                //Include(u => u.Address) 
-                .Where(u => u.Id == id).FirstOrDefaultAsync();
+                .Include(u => u.Friends)
+                .ThenInclude(f => f.Friend)  // Includes Friend details in each UserFriend entry
+                .Where(u => u.Id == id)
+                .FirstOrDefaultAsync();
+
             if (user != null)
             {
-                return user;
+                // Map the user to DisplayUserDTO
+                var displayUserDTO = new DisplayUserDTO
+                {
+                    user = new UserDTO
+                    {
+                        Id = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email,
+                        UserName = user.UserName,
+                        Photo = user.Photo,
+                        PhoneNumber = user.PhoneNumber,
+                        DateOfBirth = (DateTime)user.DateOfBirth,
+                        Country = user.Country,
+                        City = user.City,
+                        Region = user.Region,
+                        SubCity = user.SubCity,
+                        PostalCode = user.PostalCode,
+                        StreetAddress = user.StreetAddress,
+                        CreatedAt = user.CreatedAt,
+                        UpdatedAt = user.UpdatedAt,
+                    },
+                    // Map each friend to FriendDTO
+                    Friends = user.Friends.Select(f => new FriendDTO
+                    {
+                        Id = f.Friend.Id,
+                        Name = f.Friend.FirstName + " " +  f.Friend.LastName,
+                        Photo = f.Friend.Photo,
+                        UserName = f.Friend.UserName
+                       
+                    }).ToList()
+                };
 
+                return displayUserDTO;
             }
-            return null;
+
+            return null;  // Return null if user not found
         }
+
 
         public async Task<List<User>> GetAllUsers()
         {
