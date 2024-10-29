@@ -42,6 +42,8 @@ namespace LewachBookTrading.Model
 
         public DateTime UpdatedAt { get; set; }
 
-        public List<JournalTags> JournalTags { get; set; }
+        public List<JournalTags>? JournalTags { get; set; }
+
+        public List<Journal>? Journals { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using LewachBookTrading.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LewachBookTrading.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241029193257_JournalsAdded")]
+    partial class JournalsAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,23 +44,15 @@ namespace LewachBookTrading.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("JournalTagID")
-                        .HasColumnType("int");
-
                     b.Property<int?>("JournalTagsId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("JournalUpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UsertId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("JournalTagsId");
-
-                    b.HasIndex("UsertId");
 
                     b.ToTable("Journals");
                 });
@@ -177,14 +172,6 @@ namespace LewachBookTrading.Migrations
                     b.HasOne("LewachBookTrading.Model.JournalTags", null)
                         .WithMany("Journals")
                         .HasForeignKey("JournalTagsId");
-
-                    b.HasOne("LewachBookTrading.Model.User", "User")
-                        .WithMany("Journals")
-                        .HasForeignKey("UsertId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LewachBookTrading.Model.JournalPhoto", b =>
@@ -222,8 +209,6 @@ namespace LewachBookTrading.Migrations
             modelBuilder.Entity("LewachBookTrading.Model.User", b =>
                 {
                     b.Navigation("JournalTags");
-
-                    b.Navigation("Journals");
                 });
 #pragma warning restore 612, 618
         }

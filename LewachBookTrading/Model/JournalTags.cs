@@ -16,6 +16,6 @@ namespace LewachBookTrading.Model
         [System.Text.Json.Serialization.JsonIgnore]
         public User User { get; set; }
 
-        public List<Journal> Journals { get; set; }
+        public List<Journal>? Journals { get; set; }
     }
 }

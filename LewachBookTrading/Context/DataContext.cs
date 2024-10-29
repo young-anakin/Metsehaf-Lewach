@@ -12,6 +12,7 @@ namespace LewachBookTrading.Context
         public DbSet<User> Users { get; set; }
         public DbSet<JournalTags> JournalTags { get; set; } = null!;
 
+        public DbSet<Journal> Journals { get; set; } = null!;
 
         //public DbSet<Address> Address { get; set; }
 
@@ -21,6 +22,18 @@ namespace LewachBookTrading.Context
                         .HasMany(u => u.JournalTags)
                         .WithOne(j => j.User)
                         .HasForeignKey(j => j.UserId);
+
+            modelBuilder.Entity<User>()
+                        .HasMany(u => u.Journals)
+                        .WithOne(j => j.User)
+                        .HasForeignKey(j => j.UsertId);
+
+            //modelBuilder.Entity<JournalTags>()
+            //            .HasMany(jt => jt.Journals)
+            //            .WithOne(j => j.Tag)
+            //            .HasForeignKey(j => j.JournalTagID);
+
+                        
         }
 
 

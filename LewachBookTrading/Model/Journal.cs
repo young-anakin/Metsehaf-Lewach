@@ -14,14 +14,18 @@ namespace LewachBookTrading.Model
 
         public DateTime JournalUpdateDate { get; set; }
 
-        public ICollection<JournalPhoto> JournalPhotos { get; set; }
+        public ICollection<JournalPhoto>? JournalPhotos { get; set; }
 
-        public JournalTags Tag {  get; set; }
+        public int JournalTagID { get; set; }
+
+        //public JournalTags? Tag { get; set; }
 
 
         public int UsertId { get; set; }
 
-        public User User { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
+
+        public User? User { get; set; }
 
 
     }

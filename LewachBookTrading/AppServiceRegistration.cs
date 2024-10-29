@@ -1,4 +1,5 @@
 ﻿using DentalClinic.Services.Tools;
+using LewachBookTrading.Services.JournalService;
 using LewachBookTrading.Services.JournalTypeService;
 using LewachBookTrading.Services.UserService;
 
@@ -11,6 +12,7 @@ namespace LewachBookTrading
             services.AddScoped<IToolsService, ToolsService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IJournalTagService, JournalTagService>();
+            services.AddScoped<IJournalService, JournalService>();
         }
     }
 }
