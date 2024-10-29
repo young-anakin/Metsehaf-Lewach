@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LewachBookTrading")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9edffd40b95bf2eb769fb90c159bd832bb70c5f6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e2153d9f2cf55a1da65ae699629f426fbace86c")]
 [assembly: System.Reflection.AssemblyProductAttribute("LewachBookTrading")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LewachBookTrading")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -10,15 +10,17 @@ namespace LewachBookTrading.Context
         // Define your DbSet properties here
         // public DbSet<YourEntity> YourEntities { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<JournalTags> JournalTags { get; set; } = null!;
 
-        public DbSet<Address> Address { get; set; }
+
+        //public DbSet<Address> Address { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
-                .HasOne(u => u.Address)
-                .WithMany() // Assuming that an Address can belong to one User
-                .HasForeignKey(u => u.AddressID); // Foreign key in User pointing to Address
+                        .HasMany(u => u.JournalTags)
+                        .WithOne(j => j.User)
+                        .HasForeignKey(j => j.UserId);
         }
 
 

@@ -10,9 +10,13 @@ namespace LewachBookTrading.Model
         public string JournalName { get; set; }
         public string JournalContent { get; set; }
 
-        public DateTime JournalEntry { get; set; }
+        public DateTime JournalEntryDate { get; set; } = DateTime.Now;
+
+        public DateTime JournalUpdateDate { get; set; }
 
         public ICollection<JournalPhoto> JournalPhotos { get; set; }
+
+        public JournalTags Tag {  get; set; }
 
 
         public int UsertId { get; set; }

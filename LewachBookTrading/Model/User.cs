@@ -25,11 +25,23 @@ namespace LewachBookTrading.Model
         
         public DateTime? DateOfBirth { get; set; }
 
-        public Address? Address { get; set; }
+        public string? Country { get; set; }
 
-        public int AddressID { get; set; }
+        public string? City { get; set; }
+
+        public string? Region { get; set; }
+
+        public string? SubCity { get; set; }
+
+        public string? PostalCode { get; set; }
+
+        public string? StreetAddress { get; set; }
+
+        //public int AddressID { get; set; }
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
+
+        public List<JournalTags> JournalTags { get; set; }
     }
 }

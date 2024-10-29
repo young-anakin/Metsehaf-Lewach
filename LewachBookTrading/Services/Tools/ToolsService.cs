@@ -72,7 +72,7 @@ namespace DentalClinic.Services.Tools
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Country, UA.Address.Country),
+                //new Claim(ClaimTypes.Country, UA.Address.Country),
                 new Claim(ClaimTypes.Name, UA.UserName.ToString()),
                 new Claim(ClaimTypes.Email, UA.Email),
                 new Claim(ClaimTypes.Sid, UA.Id.ToString()),

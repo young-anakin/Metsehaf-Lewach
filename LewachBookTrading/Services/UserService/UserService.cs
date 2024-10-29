@@ -22,15 +22,15 @@ namespace LewachBookTrading.Services.UserService
         public async Task<User> AddUser(AddUserDTO DTO)
         {
             var user = new User();
-            var address = new Address();
+            //var address = new Address();
 
-            address.StreetAddress = DTO.StreetAddress;
-            address.City = DTO.City;
-            address.Country = DTO.Country;
-            address.Region = DTO.Region;
-            address.PostalCode = DTO.PostalCode;
-            address.StreetAddress = DTO.StreetAddress;
-            address.SubCity = DTO.SubCity;
+            user.StreetAddress = DTO.StreetAddress;
+            user.City = DTO.City;
+            user.Country = DTO.Country;
+            user.Region = DTO.Region;
+            user.PostalCode = DTO.PostalCode;
+            user.StreetAddress = DTO.StreetAddress;
+            user.SubCity = DTO.SubCity;
 
             user.PhoneNumber = DTO.PhoneNumber;
             user.Email = DTO.Email;
@@ -45,9 +45,6 @@ namespace LewachBookTrading.Services.UserService
             user.PasswordHash = PH;
             user.PasswordSalt = PS;
 
-            address.Id = user.Id;
-            user.AddressID = address.Id;
-            user.Address = address;
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
@@ -68,8 +65,9 @@ namespace LewachBookTrading.Services.UserService
         }
         public async Task<User> GetUser(int id)
         {
-            var user = await _context.Users.
-                Include(u => u.Address) 
+            var user = await _context.Users
+                .Include(u => u.JournalTags)
+                //Include(u => u.Address) 
                 .Where(u => u.Id == id).FirstOrDefaultAsync();
             if (user != null)
             {
@@ -81,7 +79,9 @@ namespace LewachBookTrading.Services.UserService
 
         public async Task<List<User>> GetAllUsers()
         {
-            var user = await _context.Users.Include(u => u.Address)
+            var user = await _context.Users
+                .Include(u => u.JournalTags)
+
                 .ToListAsync();
             if (user != null)
             {
@@ -130,14 +130,14 @@ namespace LewachBookTrading.Services.UserService
                 Photo = user.Photo,
                 CreatedAt = user.CreatedAt,
                 UpdatedAt = user.UpdatedAt,
-                Region = user.Address.Region,
-                PostalCode = user.Address.PostalCode,
-                StreetAddress = user.Address.StreetAddress,
+                Region = user.Region,
+                PostalCode = user.PostalCode,
+                StreetAddress = user.StreetAddress,
                 Email = user.Email,
                 DateOfBirth = user.DateOfBirth,
-                City = user.Address.City,
-                Country = user.Address.Country,
-                SubCity = user.Address.Country,
+                City = user.City,
+                Country = user.Country,
+                SubCity = user.Country,
 
 
                 Token = _toolsService.CreateToken(user)
@@ -151,8 +151,8 @@ namespace LewachBookTrading.Services.UserService
         public async Task<User> UpdateUser(UpdateUserDTO DTO)
         {
 
-            var user = await _context.Users.
-                Include(u => u.Address)
+            var user = await _context.Users
+                //Include(u => u.Address)
                 .Where(u => u.Id == DTO.id).FirstOrDefaultAsync();
             if (user != null)
             {
@@ -164,19 +164,13 @@ namespace LewachBookTrading.Services.UserService
                 user.UserName = DTO.UserName;
                 user.Photo = DTO.Photo;
                 user.UpdatedAt = DateTime.Now;
-
-                var acc = user.Address;
-                if (acc != null)
-                {   
-                    acc.Region = DTO.Region;
-                    acc.City = DTO.City;
-                    acc.PostalCode = DTO.PostalCode;
-                    acc.Country = DTO.Country;
-                    acc.SubCity = DTO.SubCity;
-                    acc.StreetAddress = DTO.StreetAddress;
-
-                }
-                user.Address = acc;
+                user.Region = DTO.Region;
+                user.City = DTO.City;
+                user.PostalCode = DTO.PostalCode;
+                user.Country = DTO.Country;
+                user.SubCity = DTO.SubCity;
+                user.StreetAddress = DTO.StreetAddress;
+                
 
 
                 _context.Users.Update(user);
