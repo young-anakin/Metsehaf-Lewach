@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\source\\repos\\Lewach\\LewachBookTrading\\LewachBookTrading.csproj": {}
+    "C:\\Users\\user\\Source\\Repos\\Lewach\\LewachBookTrading\\LewachBookTrading.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\source\\repos\\Lewach\\LewachBookTrading\\LewachBookTrading.csproj": {
+    "C:\\Users\\user\\Source\\Repos\\Lewach\\LewachBookTrading\\LewachBookTrading.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\source\\repos\\Lewach\\LewachBookTrading\\LewachBookTrading.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Source\\Repos\\Lewach\\LewachBookTrading\\LewachBookTrading.csproj",
         "projectName": "LewachBookTrading",
-        "projectPath": "C:\\Users\\user\\source\\repos\\Lewach\\LewachBookTrading\\LewachBookTrading.csproj",
+        "projectPath": "C:\\Users\\user\\Source\\Repos\\Lewach\\LewachBookTrading\\LewachBookTrading.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\source\\repos\\Lewach\\LewachBookTrading\\obj\\",
+        "outputPath": "C:\\Users\\user\\Source\\Repos\\Lewach\\LewachBookTrading\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
