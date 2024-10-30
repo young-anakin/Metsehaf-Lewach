@@ -4,6 +4,11 @@ namespace LewachBookTrading.Services.FriendService
 {
     public interface IFriendService
     {
-        Task<bool> AddFriendship(AddFriendDTO DTO);
+        Task<String> AcceptFriendRequest(int requestId);
+        Task<String> AddFriendship(AddFriendDTO DTO);
+        Task<String> DeclineFriendRequest(int requestId);
+        Task<List<FriendRequest>> GetPendingRequests(int userId);
+        Task<String> SendFriendRequest(int senderId, int receiverId);
+        Task<string> Unfriend(int userId, int FriendId);
     }
 }

@@ -15,6 +15,8 @@ namespace LewachBookTrading.Context
         public DbSet<Journal> Journals { get; set; } = null!;
 
         public DbSet<UserFriend> UserFriends { get; set; }
+        public DbSet<FriendRequest> FriendRequests { get; set; }
+
 
 
         //public DbSet<Address> Address { get; set; }
@@ -31,25 +33,36 @@ namespace LewachBookTrading.Context
                         .WithOne(j => j.User)
                         .HasForeignKey(j => j.UsertId);
 
+
+
+            //modelBuilder.Entity<UserFriend>()
+            //    .HasKey(uf => new { uf.UserId, uf.FriendId });
             modelBuilder.Entity<UserFriend>()
-                .HasKey(uf => new { uf.UserId, uf.FriendId });
+                .HasKey(uf => new { uf.UserId, uf.FriendId }); // Composite key
 
             modelBuilder.Entity<UserFriend>()
                 .HasOne(uf => uf.User)
                 .WithMany(u => u.Friends)
                 .HasForeignKey(uf => uf.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict); // Or NoAction as discussed before
 
             modelBuilder.Entity<UserFriend>()
                 .HasOne(uf => uf.Friend)
                 .WithMany()
                 .HasForeignKey(uf => uf.FriendId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict); // Or NoAction
 
-            //modelBuilder.Entity<JournalTags>()
-            //            .HasMany(jt => jt.Journals)
-            //            .WithOne(j => j.Tag)
-            //            .HasForeignKey(j => j.JournalTagID);
+            modelBuilder.Entity<FriendRequest>()
+                .HasOne(fr => fr.Sender)
+                .WithMany() // Assuming a User can have many sent FriendRequests
+                .HasForeignKey(fr => fr.SenderId)
+                .OnDelete(DeleteBehavior.NoAction); // Prevent cascading deletes
+
+            modelBuilder.Entity<FriendRequest>()
+                .HasOne(fr => fr.Receiver)
+                .WithMany() // Assuming a User can have many received FriendRequests
+                .HasForeignKey(fr => fr.ReceiverId)
+                .OnDelete(DeleteBehavior.NoAction); // Prevent cascading deletes
 
 
         }

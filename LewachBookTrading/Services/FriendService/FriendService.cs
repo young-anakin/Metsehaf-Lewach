@@ -18,11 +18,11 @@ namespace LewachBookTrading.Services.FriendService
 
         }
 
-        public async Task<bool> AddFriendship(AddFriendDTO DTO)
+        public async Task<String> AddFriendship(AddFriendDTO DTO)
         {
             if (DTO.UserId == DTO.FriendId)
             {
-                return false;
+                return "Can't be friends with self";
             }
 
             var existingFriendship = await _context.UserFriends
@@ -33,7 +33,7 @@ namespace LewachBookTrading.Services.FriendService
 
             if (existingFriendship)
             {
-                return false; // Friendship already exists
+                return "Friendship already exists"; // Friendship already exists
             }
 
             var userFriend = new UserFriend
@@ -48,12 +48,107 @@ namespace LewachBookTrading.Services.FriendService
                 FriendId = DTO.UserId
             };
 
-            _context.UserFriends.Add(userFriend);
-            _context.UserFriends.Add(reciprocalFriendship);
+            await _context.UserFriends.AddAsync(userFriend);
+            await _context.UserFriends.AddAsync(reciprocalFriendship);
 
             await _context.SaveChangesAsync();
 
-            return true;
+            return "Friends";
+        }
+
+        public async Task<String> SendFriendRequest(int senderId, int receiverId)
+        {
+            // Check if a request already exists
+            var existingRequest = await _context.FriendRequests
+                .AnyAsync(fr => fr.SenderId == senderId && fr.ReceiverId == receiverId && !fr.IsAccepted && !fr.IsDeclined);
+
+            if (existingRequest)
+            {
+                return "Request already exists"; // Request already exists
+            }
+
+            var friendRequest = new FriendRequest
+            {
+                SenderId = senderId,
+                ReceiverId = receiverId,
+                CreatedAt = DateTime.UtcNow,
+                IsAccepted = false,
+                IsDeclined = false
+            };
+
+            _context.FriendRequests.Add(friendRequest);
+            await _context.SaveChangesAsync();
+            return "Friend request sent";
+        }
+
+        public async Task<String> AcceptFriendRequest(int requestId)
+        {
+            var request = await _context.FriendRequests.FindAsync(requestId);
+
+            if (request == null || request.IsAccepted || request.IsDeclined)
+            {
+                return "Friend request not found or it has already been processed"; // Request not found or already processed
+            }
+
+            AddFriendDTO afDTO = new AddFriendDTO();
+            afDTO.FriendId = request.ReceiverId;
+            afDTO.UserId = request.SenderId;
+
+            //AddFriendship(afDTO);
+
+            request.IsAccepted = true; // Mark as accepted
+            await _context.SaveChangesAsync();
+            return "Friend request accepted";
+        }
+
+        public async Task<string> Unfriend(int userId, int FriendId)
+        {
+            var request = await _context.FriendRequests
+                            .Where(u => (u.SenderId == userId && u.ReceiverId == FriendId) || (u.SenderId == FriendId && u.ReceiverId == userId))
+                            .FirstOrDefaultAsync();
+
+            if (request == null)
+            {
+                return "Not friends";
+            }
+            _context.FriendRequests.Remove(request);
+
+            var friendshipA = await _context.UserFriends
+                                            .Where(uf => uf.UserId == userId && uf.FriendId == FriendId)
+                                            .FirstOrDefaultAsync();
+            var friendshipB = await _context.UserFriends
+                                            .Where(uf => uf.UserId == FriendId && uf.FriendId == userId)
+                                            .FirstOrDefaultAsync();
+            if (friendshipA == null || friendshipB == null)
+            {
+                return "Not friends";
+            }
+            _context.UserFriends.Remove(friendshipA);
+            _context.UserFriends.Remove(friendshipB);
+
+            await _context.SaveChangesAsync();
+            return "Unfriended";
+        }
+
+        public async Task<String> DeclineFriendRequest(int requestId)
+        {
+            var request = await _context.FriendRequests.FindAsync(requestId);
+
+            if (request == null || request.IsAccepted || request.IsDeclined)
+            {
+                return "Friend request not found or it has already been processed"; // Request not found or already processed
+            }
+
+            request.IsDeclined = true; // Mark as declined
+            await _context.SaveChangesAsync();
+            return "Friend request declined";
+        }
+
+        public async Task<List<FriendRequest>> GetPendingRequests(int userId)
+        {
+            return await _context.FriendRequests
+                .Where(fr => fr.ReceiverId == userId && !fr.IsAccepted && !fr.IsDeclined)
+                .ToListAsync();
         }
     }
 }
