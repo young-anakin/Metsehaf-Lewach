@@ -256,5 +256,45 @@ namespace LewachBookTrading.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "An unexpected error occurred. Please try again later." });
             }
         }
+
+        [HttpDelete("RemoveFriendRequest")]
+        public async Task<ActionResult> RemoveFriendRequest(int RequestId, int SenderId)
+        {
+            try
+            {
+                return Ok(await _friendService.RemoveFriendRequest(RequestId, SenderId));
+            }
+            //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new ErrorResponse { Message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new ErrorResponse { Message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new ErrorResponse { Message = ex.Message });
+            }
+            catch (DbUpdateException ex)
+            {
+                // Handle database update related exceptions specifically
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Database update error: " + ex.InnerException?.Message });
+            }
+            catch (NullReferenceException ex)
+            {
+                // Handle null reference exceptions
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Null reference error: " + ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details for further analysis
+                // Use your logging framework here
+                Console.WriteLine(ex); // or a logger
+
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "An unexpected error occurred. Please try again later." });
+            }
+        }
     }
 }

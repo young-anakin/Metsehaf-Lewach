@@ -53,5 +53,14 @@ namespace LewachBookTrading.Services.JournalTypeService
             await _context.SaveChangesAsync();
             return jt;
         }
+
+        public async Task<JournalTags> DeleteJournalTag(int id)
+        {
+            var tag = await _context.JournalTags.FirstOrDefaultAsync(jt => jt.Id == id);
+
+            _context.JournalTags.Remove(tag);   
+            await _context.SaveChangesAsync();
+            return tag;
+        }
     }
 }

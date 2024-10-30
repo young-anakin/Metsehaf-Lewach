@@ -4,6 +4,7 @@ using LewachBookTrading.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LewachBookTrading.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241030142450_dateaddedtoUserFriend")]
+    partial class dateaddedtoUserFriend
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,7 +116,7 @@ namespace LewachBookTrading.Migrations
 
                     b.HasIndex("JournalId");
 
-                    b.ToTable("JournalPhotos");
+                    b.ToTable("JournalPhoto");
                 });
 
             modelBuilder.Entity("LewachBookTrading.Model.JournalTags", b =>

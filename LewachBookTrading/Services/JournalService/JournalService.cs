@@ -25,6 +25,8 @@ namespace LewachBookTrading.Services.JournalService
             journal.JournalName = DTO.JournalName;
             journal.JournalContent = DTO.JournalContent;
 
+            
+
             var journalType = await _context.JournalTags.FirstOrDefaultAsync(j => j.Id == DTO.JournalTypeId);
 
             if (journalType == null)
@@ -45,6 +47,15 @@ namespace LewachBookTrading.Services.JournalService
                 return null;
             }
 
+            if (DTO.JournalPhotos != null && DTO.JournalPhotos.Any())
+            {
+                journal.JournalPhotos = DTO.JournalPhotos.Select(photoDto => new JournalPhoto
+                {
+                    PhotoUrl = photoDto.PhotoUrl,
+                    Journal = journal
+                }).ToList();
+            }
+
             await _context.Journals.AddAsync(journal);
             await _context.SaveChangesAsync();
             return journal;
@@ -54,9 +65,11 @@ namespace LewachBookTrading.Services.JournalService
         {
             // Fetch journals for the specified user
             var journals = await _context.Journals
+                .Include(j => j.JournalPhotos)
                 .Where(j => j.UsertId == userId)
                 .Select(j => new DisplayJournalDTO
                 {
+                    JournalId = j.Id,
                     JournalName = j.JournalName,
                     JournalContent = j.JournalContent,
                     JournalEntryDate = j.JournalEntryDate,
@@ -70,11 +83,50 @@ namespace LewachBookTrading.Services.JournalService
             return journals;
         }
 
+        public async Task<JournalPhoto> RemoveJournalPhoto(int JournalPhoto)
+        {
+            var journalPhoto = await _context.JournalPhotos.FirstOrDefaultAsync(jt => jt.Id == JournalPhoto);
+
+            if (journalPhoto == null)
+            {
+                return null;
+            }
+
+            _context.JournalPhotos.Remove(journalPhoto);
+            await _context.SaveChangesAsync();
+
+            return journalPhoto;
+        }
+
+        public async Task<Journal> DeleteJournal(int JournalId)
+        {
+            var journal = await _context.Journals.FirstOrDefaultAsync(j => j.Id == JournalId);
+            if (journal == null)
+            {
+                return null;
+            }    
+            _context.Journals.Remove(journal);
+            await _context.SaveChangesAsync();
+            return journal;
+        }
+
+        public async Task<JournalPhoto> GetJournalPhoto(int PhotoId)
+        {
+            var journalPhoto = await _context.JournalPhotos
+                                            .FirstOrDefaultAsync(jt => jt.Id == PhotoId);
+            if (journalPhoto == null)
+            {
+                return null;
+            }
+            return journalPhoto;
+        }
+
 
         public async Task<DisplayJournalDTO> GetSpecificJournal(int id)
         {
             var journal = await _context.Journals
                                         .Where(j => j.Id == id)
+                                        .Include(j => j.JournalPhotos)
                                         .FirstOrDefaultAsync();
 
             var tags = await _context.JournalTags.Where(j => j.Id == journal.JournalTagID).FirstOrDefaultAsync();
@@ -86,12 +138,14 @@ namespace LewachBookTrading.Services.JournalService
             }
             DisplayJournalDTO res = new DisplayJournalDTO();
 
+            res.JournalId = journal.Id;
             res.JournalPhotos = journal.JournalPhotos;
             res.JournalName = journal.JournalName;
             res.JournalContent = journal.JournalContent;
             res.JournalUpdateDate = journal.JournalUpdateDate;
             res.JournalEntryDate = journal.JournalEntryDate;
             res.JournalTagID = journal.JournalTagID;
+            res.JournalPhotos = journal.JournalPhotos;
             if (tags == null)
             {
                 res.Tag = null;

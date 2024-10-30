@@ -130,6 +130,26 @@ namespace LewachBookTrading.Services.FriendService
             return "Unfriended";
         }
 
+        //public async Task<List<User>> GetFriendsOfUser(int id)
+        //{
+        //    var friends = _context.FriendRequests
+        //}
+
+        public async Task<FriendRequest> RemoveFriendRequest(int requestId, int sender)
+        {
+            var request = await _context.FriendRequests.FindAsync(requestId);
+
+            
+            if (request == null || sender != request.SenderId)
+            {
+                return null;
+            }
+
+            _context.FriendRequests.Remove(request);
+            await _context.SaveChangesAsync();
+            return request;
+        }
+
         public async Task<String> DeclineFriendRequest(int requestId)
         {
             var request = await _context.FriendRequests.FindAsync(requestId);

@@ -4,6 +4,7 @@ namespace LewachBookTrading.DTOs.JournalDTO
 {
     public class DisplayJournalDTO
     {
+        public int JournalId { get; set; }
         public string JournalName { get; set; }
         public string JournalContent { get; set; }
 

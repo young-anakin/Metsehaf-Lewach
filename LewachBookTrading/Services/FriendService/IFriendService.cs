@@ -8,6 +8,7 @@ namespace LewachBookTrading.Services.FriendService
         Task<String> AddFriendship(AddFriendDTO DTO);
         Task<String> DeclineFriendRequest(int requestId);
         Task<List<FriendRequest>> GetPendingRequests(int userId);
+        Task<FriendRequest> RemoveFriendRequest(int requestId, int sender);
         Task<String> SendFriendRequest(int senderId, int receiverId);
         Task<string> Unfriend(int userId, int FriendId);
     }
