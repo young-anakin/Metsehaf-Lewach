@@ -4,6 +4,7 @@ using LewachBookTrading.DTOs.FriendDTO;
 using LewachBookTrading.DTOs.UserDTO;
 using LewachBookTrading.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace LewachBookTrading.Services.UserService
 {
@@ -23,6 +24,14 @@ namespace LewachBookTrading.Services.UserService
         public async Task<User> AddUser(AddUserDTO DTO)
         {
             var user = new User();
+
+            var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == DTO.RoleId);
+            if (role == null)
+            {
+                // Handle the case where the role is not found
+                throw new Exception("Role not found.");
+            }
+
             //var address = new Address();
 
             user.StreetAddress = DTO.StreetAddress;
@@ -45,8 +54,9 @@ namespace LewachBookTrading.Services.UserService
             _toolsService.CreatePasswordHash(DTO.Password, out byte[] PH, out byte[] PS);
             user.PasswordHash = PH;
             user.PasswordSalt = PS;
-
-
+            user.RoleId = DTO.RoleId;
+            user.Role = role;
+            
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return user;
@@ -61,6 +71,11 @@ namespace LewachBookTrading.Services.UserService
                 await _context.SaveChangesAsync();
                 return user;
             }
+            if (user == null)
+            {
+                // Handle the case where the role is not found
+                throw new Exception("Role not found.");
+            }
             return null;
 
         }
@@ -68,6 +83,7 @@ namespace LewachBookTrading.Services.UserService
         {
             // Fetch the user and include their friends
             var user = await _context.Users
+                .Include(u => u.Role)
                 .Include(u => u.Friends)
                 .ThenInclude(f => f.Friend)  // Includes Friend details in each UserFriend entry
                 .Where(u => u.Id == id)
@@ -111,7 +127,13 @@ namespace LewachBookTrading.Services.UserService
                 return displayUserDTO;
             }
 
-            return null;  // Return null if user not found
+            if (user == null)
+            {
+                // Handle the case where the role is not found
+                throw new Exception("Role not found.");
+            };  // Return null if user not found
+
+            return null;
         }
 
 
@@ -121,12 +143,18 @@ namespace LewachBookTrading.Services.UserService
                 //.Include(u => u.Journals)
 
                 .Include(u => u.JournalTags)
+                .Include(u => u.Role)
 
                 .ToListAsync();
             if (user != null)
             {
                 return user;
 
+            }
+            if (user == null)
+            {
+                // Handle the case where the role is not found
+                throw new Exception("Role not found.");
             }
             return null;
         }
@@ -218,7 +246,11 @@ namespace LewachBookTrading.Services.UserService
                 return user;
 
             }
-
+            if (user == null)
+            {
+                // Handle the case where the role is not found
+                throw new Exception("Role not found.");
+            }
             return null;
 
         }

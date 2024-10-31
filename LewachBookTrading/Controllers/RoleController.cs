@@ -1,8 +1,8 @@
-﻿using LewachBookTrading.DTOs.JournalDTO;
-using LewachBookTrading.DTOs.JournalTypesDTO;
+﻿using LewachBookTrading.DTOs.RoleDTO;
+using LewachBookTrading.DTOs.UserDTO;
 using LewachBookTrading.Model;
-using LewachBookTrading.Services.JournalService;
-using LewachBookTrading.Services.JournalTypeService;
+using LewachBookTrading.Services.RoleService;
+using LewachBookTrading.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,60 +10,20 @@ namespace LewachBookTrading.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class JournalController : Controller
+    public class RoleController : Controller
     {
-        private readonly IJournalService _journalService;
-
-        public JournalController(IJournalService journalService)
+        private readonly IRoleService _roleService;
+        public RoleController(IRoleService roleService)
         {
-            _journalService = journalService;
+            _roleService = roleService;
         }
         //Add a new Employee 
-        [HttpPost("AddJournal")]
-        public async Task<ActionResult> AddEmployee(AddJournalDTO DTO)
+        [HttpPost("AddRole")]
+        public async Task<ActionResult> AddEmployee(AddRoleDTO roleDTO)
         {
             try
             {
-                return Ok(await _journalService.AddJournal(DTO));
-            }
-            //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { Message = ex.Message });
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new ErrorResponse { Message = ex.Message });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Conflict(new ErrorResponse { Message = ex.Message });
-            }
-            catch (DbUpdateException ex)
-            {
-                // Handle database update related exceptions specifically
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Database update error: " + ex.InnerException?.Message });
-            }
-            catch (NullReferenceException ex)
-            {
-                // Handle null reference exceptions
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Null reference error: " + ex.Message });
-            }
-            catch (Exception ex)
-            {
-                // Log the exception details for further analysis
-                // Use your logging framework here
-                Console.WriteLine(ex); // or a logger
-
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "An unexpected error occurred. Please try again later." });
-            }
-        }
-        [HttpGet("GetSpecificJournal")]
-        public async Task<ActionResult> GetSpecificJournal(int journalId)
-        {
-            try
-            {
-                return Ok(await _journalService.GetSpecificJournal(journalId));
+                return Ok(await _roleService.AddRole(roleDTO));
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (KeyNotFoundException ex)
@@ -98,12 +58,12 @@ namespace LewachBookTrading.Controllers
             }
         }
 
-        [HttpGet("GetUserJournals")]
-        public async Task<ActionResult> GetJournalOfuser(int userid)
+        [HttpGet("GetSpecificRole")]
+        public async Task<ActionResult> GetSpecificRole(int roleId)
         {
             try
             {
-                return Ok(await _journalService.GetJournalsByUser(userid));
+                return Ok(await _roleService.GetSpecificRole(roleId));
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (KeyNotFoundException ex)
@@ -138,14 +98,12 @@ namespace LewachBookTrading.Controllers
             }
         }
 
-
-
-        [HttpGet("GetJournalPhoto")]
-        public async Task<ActionResult> GetJournalPhoto(int journalPhotoId)
+        [HttpGet("GetAllRoles")]
+        public async Task<ActionResult> GetAllRoles( )
         {
             try
             {
-                return Ok(await _journalService.GetJournalPhoto(journalPhotoId));
+                return Ok(await _roleService.GetRoles());
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (KeyNotFoundException ex)
@@ -180,12 +138,12 @@ namespace LewachBookTrading.Controllers
             }
         }
 
-        [HttpDelete("DeleteJournalPhoto")]
-        public async Task<ActionResult> DeleteJournalPhoto(int journalPhotoId)
+        [HttpPut("UpdateRole")]
+        public async Task<ActionResult> UpdateRole(UpdateRoleDTO roleDTO)
         {
             try
             {
-                return Ok(await _journalService.RemoveJournalPhoto(journalPhotoId));
+                return Ok(await _roleService.UpdateRole(roleDTO));
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (KeyNotFoundException ex)
@@ -220,14 +178,12 @@ namespace LewachBookTrading.Controllers
             }
         }
 
-
-
-        [HttpDelete("DeleteJournal")]
-        public async Task<ActionResult> DeleteJournal(int JournalId)
+        [HttpDelete("DeleteRole")]
+        public async Task<ActionResult> DeleteRole(int Roleid)
         {
             try
             {
-                return Ok(await _journalService.DeleteJournal(JournalId));
+                return Ok(await _roleService.DeleteRole(Roleid));
             }
             //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
             catch (KeyNotFoundException ex)
@@ -262,44 +218,5 @@ namespace LewachBookTrading.Controllers
             }
         }
 
-        [HttpPut("UpdateJournal")]
-        public async Task<ActionResult> UpdateJournal(UpdateJournalDTO DTO)
-        {
-            try
-            {
-                return Ok(await _journalService.UpdateJournal(DTO));
-            }
-            //return Ok(await _employeeService.AddEmployee(employeeDTO));            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new ErrorResponse { Message = ex.Message });
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new ErrorResponse { Message = ex.Message });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Conflict(new ErrorResponse { Message = ex.Message });
-            }
-            catch (DbUpdateException ex)
-            {
-                // Handle database update related exceptions specifically
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Database update error: " + ex.InnerException?.Message });
-            }
-            catch (NullReferenceException ex)
-            {
-                // Handle null reference exceptions
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Null reference error: " + ex.Message });
-            }
-            catch (Exception ex)
-            {
-                // Log the exception details for further analysis
-                // Use your logging framework here
-                Console.WriteLine(ex); // or a logger
-
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "An unexpected error occurred. Please try again later." });
-            }
-        }
     }
 }

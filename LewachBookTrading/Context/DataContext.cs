@@ -19,6 +19,8 @@ namespace LewachBookTrading.Context
         public DbSet<UserFriend> UserFriends { get; set; }
         public DbSet<FriendRequest> FriendRequests { get; set; }
 
+        public DbSet<Role> Roles { get; set; }
+
 
 
         //public DbSet<Address> Address { get; set; }
@@ -29,6 +31,11 @@ namespace LewachBookTrading.Context
                         .HasMany(u => u.JournalTags)
                         .WithOne(j => j.User)
                         .HasForeignKey(j => j.UserId);
+
+            modelBuilder.Entity<Role>()
+                        .HasMany(r => r.Users)
+                        .WithOne(u => u.Role)
+                        .HasForeignKey(u => u.RoleId);
 
             modelBuilder.Entity<User>()
                         .HasMany(u => u.Journals)

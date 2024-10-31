@@ -3,6 +3,7 @@ using LewachBookTrading.Context;
 using LewachBookTrading.DTOs.FriendDTO;
 using LewachBookTrading.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace LewachBookTrading.Services.FriendService
 {
@@ -22,7 +23,7 @@ namespace LewachBookTrading.Services.FriendService
         {
             if (DTO.UserId == DTO.FriendId)
             {
-                return "Can't be friends with self";
+                throw new Exception("Can't be friends with self.");
             }
 
             var existingFriendship = await _context.UserFriends
@@ -33,7 +34,7 @@ namespace LewachBookTrading.Services.FriendService
 
             if (existingFriendship)
             {
-                return "Friendship already exists"; // Friendship already exists
+                throw new Exception("Friendship already exists.");
             }
 
             var userFriend = new UserFriend
@@ -64,7 +65,14 @@ namespace LewachBookTrading.Services.FriendService
 
             if (existingRequest)
             {
-                return "Request already exists"; // Request already exists
+                throw new Exception("Request already exists.");
+            }
+
+            var frienship = await _context.UserFriends.AnyAsync(fr => fr.FriendId == senderId && fr.UserId == receiverId);
+
+            if (frienship)
+            {
+                throw new Exception("Friendship already exists");
             }
 
             var friendRequest = new FriendRequest
@@ -75,6 +83,13 @@ namespace LewachBookTrading.Services.FriendService
                 IsAccepted = false,
                 IsDeclined = false
             };
+
+            var sender = await _context.Users.FirstOrDefaultAsync(u => u.Id == senderId);
+            var receiver = await _context.Users.FirstOrDefaultAsync(u => u.Id == receiverId);
+
+            friendRequest.Sender = sender;
+            friendRequest.Receiver = receiver;
+
 
             _context.FriendRequests.Add(friendRequest);
             await _context.SaveChangesAsync();
@@ -87,7 +102,7 @@ namespace LewachBookTrading.Services.FriendService
 
             if (request == null || request.IsAccepted || request.IsDeclined)
             {
-                return "Friend request not found or it has already been processed"; // Request not found or already processed
+                throw new Exception( "Friend request not found or it has already been processed"); // Request not found or already processed
             }
 
             AddFriendDTO afDTO = new AddFriendDTO();
@@ -109,7 +124,7 @@ namespace LewachBookTrading.Services.FriendService
 
             if (request == null)
             {
-                return "Not friends";
+                throw new Exception("Friendship not found.");
             }
             _context.FriendRequests.Remove(request);
 
@@ -121,7 +136,9 @@ namespace LewachBookTrading.Services.FriendService
                                             .FirstOrDefaultAsync();
             if (friendshipA == null || friendshipB == null)
             {
-                return "Not friends";
+
+                    // Handle the case where the role is not found
+                    throw new Exception("Friendship not found.");
             }
             _context.UserFriends.Remove(friendshipA);
             _context.UserFriends.Remove(friendshipB);
@@ -142,7 +159,11 @@ namespace LewachBookTrading.Services.FriendService
             
             if (request == null || sender != request.SenderId)
             {
-                return null;
+                if (request == null)
+                {
+                    // Handle the case where the role is not found
+                    throw new Exception("request not found.");
+                }
             }
 
             _context.FriendRequests.Remove(request);
@@ -167,6 +188,8 @@ namespace LewachBookTrading.Services.FriendService
         public async Task<List<FriendRequest>> GetPendingRequests(int userId)
         {
             return await _context.FriendRequests
+                .Include(u=> u.Sender)
+                .Include(u=> u.Receiver)
                 .Where(fr => fr.ReceiverId == userId && !fr.IsAccepted && !fr.IsDeclined)
                 .ToListAsync();
         }

@@ -3,6 +3,7 @@ using LewachBookTrading.Context;
 using LewachBookTrading.DTOs.JournalTypesDTO;
 using LewachBookTrading.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace LewachBookTrading.Services.JournalTypeService
 {
@@ -27,7 +28,8 @@ namespace LewachBookTrading.Services.JournalTypeService
 
             if (user == null)
             {
-                return null;
+                // Handle the case where the role is not found
+                throw new Exception("User not found.");
             }
 
             jt.UserId = DTO.UserId;

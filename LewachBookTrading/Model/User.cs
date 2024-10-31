@@ -47,6 +47,11 @@ namespace LewachBookTrading.Model
         public List<Journal>? Journals { get; set; }
         //[System.Text.Json.Serialization.JsonIgnore]
 
+
+        public int RoleId { get; set; }
+
+        public Role? Role { get; set; }
+
         public ICollection<UserFriend> Friends { get; set; } = new List<UserFriend>();
 
     }

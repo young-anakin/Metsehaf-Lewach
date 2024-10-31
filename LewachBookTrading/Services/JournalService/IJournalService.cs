@@ -11,5 +11,6 @@ namespace LewachBookTrading.Services.JournalService
         Task<List<DisplayJournalDTO>> GetJournalsByUser(int id);
         Task<DisplayJournalDTO> GetSpecificJournal(int id);
         Task<JournalPhoto> RemoveJournalPhoto(int JournalPhoto);
+        Task<Journal> UpdateJournal(UpdateJournalDTO DTO);
     }
 }

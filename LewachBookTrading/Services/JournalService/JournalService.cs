@@ -4,6 +4,7 @@ using LewachBookTrading.DTOs.JournalDTO;
 using LewachBookTrading.DTOs.JournalTypesDTO;
 using LewachBookTrading.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace LewachBookTrading.Services.JournalService
 {
@@ -31,8 +32,8 @@ namespace LewachBookTrading.Services.JournalService
 
             if (journalType == null)
             {
-                string s = "not found";
-                return null;
+                // Handle the case where the role is not found
+                throw new Exception("Role not found.");
             }
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == DTO.UsertId);
@@ -44,7 +45,11 @@ namespace LewachBookTrading.Services.JournalService
             }
             else
             {
-                return null;
+                if (user == null)
+                {
+                    // Handle the case where the role is not found
+                    throw new Exception("Role not found.");
+                }
             }
 
             if (DTO.JournalPhotos != null && DTO.JournalPhotos.Any())
@@ -59,6 +64,64 @@ namespace LewachBookTrading.Services.JournalService
             await _context.Journals.AddAsync(journal);
             await _context.SaveChangesAsync();
             return journal;
+        }
+
+        public async Task<Journal> UpdateJournal(UpdateJournalDTO DTO)
+        {
+            var journal = await _context.Journals.
+                            Include(j => j.JournalPhotos) // Include JournalPhotos to load existing photos
+                            .FirstOrDefaultAsync(j => j.Id == DTO.JournalID);
+
+            var journalType = await _context.JournalTags.FirstOrDefaultAsync(j => j.Id == DTO.JournalTypeId);
+
+            if (journalType == null)
+            {
+                // Handle the case where the role is not found
+                throw new Exception("Role not found.");
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == DTO.UsertId);
+            if (user != null)
+            {
+                //journal.UsertId = user.Id;
+                //journal.User = user;
+                //journal.JournalTagID = DTO.JournalTypeId;
+            }
+            else
+            {
+                if (user == null)
+                {
+                    // Handle the case where the role is not found
+                    throw new Exception("Role not found.");
+                }
+            }
+
+            journal.JournalUpdateDate = DateTime.Now;
+            journal.JournalName = DTO.JournalName;
+            journal.JournalContent = DTO.JournalContent;
+            journal.JournalTagID = DTO.JournalTypeId;
+
+
+            if (DTO.JournalPhotos != null && DTO.JournalPhotos.Any())
+            {
+                var newPhotos = DTO.JournalPhotos.Select(photoDto => new JournalPhoto
+                {
+                    PhotoUrl = photoDto.PhotoUrl,
+                    Journal = journal
+                }).ToList();
+
+                // Add new photos to the existing collection
+                var photosList = journal.JournalPhotos.ToList();
+                photosList.AddRange(newPhotos);
+                journal.JournalPhotos = photosList;
+            }
+
+             _context.Journals.Update(journal);
+            //journal.
+            await _context.SaveChangesAsync();
+
+            return journal;
+
         }
 
         public async Task<List<DisplayJournalDTO>> GetJournalsByUser(int userId)
@@ -89,7 +152,8 @@ namespace LewachBookTrading.Services.JournalService
 
             if (journalPhoto == null)
             {
-                return null;
+                // Handle the case where the role is not found
+                throw new Exception("Role not found.");
             }
 
             _context.JournalPhotos.Remove(journalPhoto);
@@ -103,12 +167,14 @@ namespace LewachBookTrading.Services.JournalService
             var journal = await _context.Journals.FirstOrDefaultAsync(j => j.Id == JournalId);
             if (journal == null)
             {
-                return null;
-            }    
+                // Handle the case where the role is not found
+                throw new Exception("Role not found.");
+            }
             _context.Journals.Remove(journal);
             await _context.SaveChangesAsync();
             return journal;
         }
+
 
         public async Task<JournalPhoto> GetJournalPhoto(int PhotoId)
         {
@@ -116,7 +182,8 @@ namespace LewachBookTrading.Services.JournalService
                                             .FirstOrDefaultAsync(jt => jt.Id == PhotoId);
             if (journalPhoto == null)
             {
-                return null;
+                // Handle the case where the role is not found
+                throw new Exception("Role not found.");
             }
             return journalPhoto;
         }
@@ -133,8 +200,8 @@ namespace LewachBookTrading.Services.JournalService
 
             if (journal == null)
             {
-
-            return null;
+                // Handle the case where the role is not found
+                throw new Exception("Role not found.");
             }
             DisplayJournalDTO res = new DisplayJournalDTO();
 

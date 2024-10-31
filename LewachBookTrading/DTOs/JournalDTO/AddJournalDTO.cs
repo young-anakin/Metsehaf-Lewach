@@ -17,7 +17,7 @@ namespace LewachBookTrading.DTOs.JournalDTO
     }
     public class JournalPhotoDTO
     {
-        public string PhotoUrl { get; set; }
+        public string? PhotoUrl { get; set; }
     }
 
 }
