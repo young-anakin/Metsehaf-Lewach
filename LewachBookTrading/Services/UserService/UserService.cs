@@ -69,7 +69,7 @@ namespace LewachBookTrading.Services.UserService
         public async Task<User> GetUser(int id)
         {
             var user = await _context.Users.
-                Include(u => u.Address) 
+                Include(u => u.Address).Include(u => u.Posts).Include(u => u.Likes).Include(u => u.Comments)
                 .Where(u => u.Id == id).FirstOrDefaultAsync();
             if (user != null)
             {
@@ -81,7 +81,9 @@ namespace LewachBookTrading.Services.UserService
 
         public async Task<List<User>> GetAllUsers()
         {
-            var user = await _context.Users.Include(u => u.Address)
+            
+
+            var user = await _context.Users.Include(u => u.Address).Include(u => u.Posts).Include(u => u.Likes).Include(u => u.Comments)
                 .ToListAsync();
             if (user != null)
             {

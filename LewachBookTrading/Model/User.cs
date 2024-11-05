@@ -31,5 +31,11 @@ namespace LewachBookTrading.Model
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
+
+        public ICollection<Post> Posts { get; set; } = new List<Post>();
+
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<Like> Likes { get; set; } = new List<Like>();
+
     }
 }
