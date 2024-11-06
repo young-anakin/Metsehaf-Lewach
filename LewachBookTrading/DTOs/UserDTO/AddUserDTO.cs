@@ -32,6 +32,8 @@ namespace LewachBookTrading.DTOs.UserDTO
 
         public string? StreetAddress { get; set; }
 
+        public int RoleId { get; set; }
+
 
     }
 }

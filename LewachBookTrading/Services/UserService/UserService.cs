@@ -1,8 +1,10 @@
 ﻿using DentalClinic.Services.Tools;
 using LewachBookTrading.Context;
+using LewachBookTrading.DTOs.FriendDTO;
 using LewachBookTrading.DTOs.UserDTO;
 using LewachBookTrading.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace LewachBookTrading.Services.UserService
 {
@@ -22,15 +24,23 @@ namespace LewachBookTrading.Services.UserService
         public async Task<User> AddUser(AddUserDTO DTO)
         {
             var user = new User();
-            var address = new Address();
 
-            address.StreetAddress = DTO.StreetAddress;
-            address.City = DTO.City;
-            address.Country = DTO.Country;
-            address.Region = DTO.Region;
-            address.PostalCode = DTO.PostalCode;
-            address.StreetAddress = DTO.StreetAddress;
-            address.SubCity = DTO.SubCity;
+            var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == DTO.RoleId);
+            if (role == null)
+            {
+                // Handle the case where the role is not found
+                throw new Exception("Role not found.");
+            }
+
+            //var address = new Address();
+
+            user.StreetAddress = DTO.StreetAddress;
+            user.City = DTO.City;
+            user.Country = DTO.Country;
+            user.Region = DTO.Region;
+            user.PostalCode = DTO.PostalCode;
+            user.StreetAddress = DTO.StreetAddress;
+            user.SubCity = DTO.SubCity;
 
             user.PhoneNumber = DTO.PhoneNumber;
             user.Email = DTO.Email;
@@ -44,11 +54,9 @@ namespace LewachBookTrading.Services.UserService
             _toolsService.CreatePasswordHash(DTO.Password, out byte[] PH, out byte[] PS);
             user.PasswordHash = PH;
             user.PasswordSalt = PS;
-
-            address.Id = user.Id;
-            user.AddressID = address.Id;
-            user.Address = address;
-
+            user.RoleId = DTO.RoleId;
+            user.Role = role;
+            
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return user;
@@ -63,32 +71,103 @@ namespace LewachBookTrading.Services.UserService
                 await _context.SaveChangesAsync();
                 return user;
             }
+
             return null;
 
         }
-        public async Task<User> GetUser(int id)
+        //public async Task<User> GetUser(int id)
+        //{
+        //    var user = await _context.Users.Include(u => u.Posts).Include(u => u.Likes).Include(u => u.Comments)
+        //        .Where(u => u.Id == id).FirstOrDefaultAsync();
+
+        //    if (user == null)
+        //    {
+        //        // Handle the case where the role is not found
+        //        throw new Exception("Role not found.");
+        //    }
+        //    return null;
+
+        //}
+        public async Task<DisplayUserDTO> GetUser(int id)
         {
-            var user = await _context.Users.
-                Include(u => u.Address).Include(u => u.Posts).Include(u => u.Likes).Include(u => u.Comments)
-                .Where(u => u.Id == id).FirstOrDefaultAsync();
+            // Fetch the user and include their friends
+            var user = await _context.Users
+                .Include(u => u.Role)
+                .Include(u => u.Friends)
+                .ThenInclude(f => f.Friend)  // Includes Friend details in each UserFriend entry
+                .Include(u => u.Posts).Include(u => u.Likes).Include(u => u.Comments)
+                .Where(u => u.Id == id)
+                .FirstOrDefaultAsync();
+
             if (user != null)
             {
-                return user;
+                // Map the user to DisplayUserDTO
+                var displayUserDTO = new DisplayUserDTO
+                {
+                    user = new UserDTO
+                    {
+                        Id = user.Id,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Email = user.Email,
+                        UserName = user.UserName,
+                        Photo = user.Photo,
+                        PhoneNumber = user.PhoneNumber,
+                        DateOfBirth = (DateTime)user.DateOfBirth,
+                        Country = user.Country,
+                        City = user.City,
+                        Region = user.Region,
+                        SubCity = user.SubCity,
+                        PostalCode = user.PostalCode,
+                        StreetAddress = user.StreetAddress,
+                        CreatedAt = user.CreatedAt,
+                        UpdatedAt = user.UpdatedAt,
+                    },
+                    // Map each friend to FriendDTO
+                    Friends = user.Friends.Select(f => new FriendDTO
+                    {
+                        Id = f.Friend.Id,
+                        Name = f.Friend.FirstName + " " +  f.Friend.LastName,
+                        Photo = f.Friend.Photo,
+                        UserName = f.Friend.UserName
+                       
+                    }).ToList()
+                };
 
+                return displayUserDTO;
             }
+
+            if (user == null)
+            {
+                // Handle the case where the role is not found
+                throw new Exception("Role not found.");
+            };  // Return null if user not found
+
             return null;
         }
+
 
         public async Task<List<User>> GetAllUsers()
         {
-            
 
-            var user = await _context.Users.Include(u => u.Address).Include(u => u.Posts).Include(u => u.Likes).Include(u => u.Comments)
+            var user = await _context.Users
+                //.Include(u => u.Journals)
+
+                .Include(u => u.JournalTags)
+                .Include(u => u.Role)
+                .Include(u => u.Posts).Include(u => u.Likes).Include(u => u.Comments)
+
+
                 .ToListAsync();
             if (user != null)
             {
                 return user;
 
+            }
+            if (user == null)
+            {
+                // Handle the case where the role is not found
+                throw new Exception("Role not found.");
             }
             return null;
         }
@@ -132,14 +211,14 @@ namespace LewachBookTrading.Services.UserService
                 Photo = user.Photo,
                 CreatedAt = user.CreatedAt,
                 UpdatedAt = user.UpdatedAt,
-                Region = user.Address.Region,
-                PostalCode = user.Address.PostalCode,
-                StreetAddress = user.Address.StreetAddress,
+                Region = user.Region,
+                PostalCode = user.PostalCode,
+                StreetAddress = user.StreetAddress,
                 Email = user.Email,
                 DateOfBirth = user.DateOfBirth,
-                City = user.Address.City,
-                Country = user.Address.Country,
-                SubCity = user.Address.Country,
+                City = user.City,
+                Country = user.Country,
+                SubCity = user.Country,
 
 
                 Token = _toolsService.CreateToken(user)
@@ -153,8 +232,8 @@ namespace LewachBookTrading.Services.UserService
         public async Task<User> UpdateUser(UpdateUserDTO DTO)
         {
 
-            var user = await _context.Users.
-                Include(u => u.Address)
+            var user = await _context.Users
+                //Include(u => u.Address)
                 .Where(u => u.Id == DTO.id).FirstOrDefaultAsync();
             if (user != null)
             {
@@ -166,19 +245,13 @@ namespace LewachBookTrading.Services.UserService
                 user.UserName = DTO.UserName;
                 user.Photo = DTO.Photo;
                 user.UpdatedAt = DateTime.Now;
-
-                var acc = user.Address;
-                if (acc != null)
-                {   
-                    acc.Region = DTO.Region;
-                    acc.City = DTO.City;
-                    acc.PostalCode = DTO.PostalCode;
-                    acc.Country = DTO.Country;
-                    acc.SubCity = DTO.SubCity;
-                    acc.StreetAddress = DTO.StreetAddress;
-
-                }
-                user.Address = acc;
+                user.Region = DTO.Region;
+                user.City = DTO.City;
+                user.PostalCode = DTO.PostalCode;
+                user.Country = DTO.Country;
+                user.SubCity = DTO.SubCity;
+                user.StreetAddress = DTO.StreetAddress;
+                
 
 
                 _context.Users.Update(user);
@@ -186,7 +259,11 @@ namespace LewachBookTrading.Services.UserService
                 return user;
 
             }
-
+            if (user == null)
+            {
+                // Handle the case where the role is not found
+                throw new Exception("Role not found.");
+            }
             return null;
 
         }

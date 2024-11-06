@@ -22,7 +22,7 @@ namespace LewachBookTrading.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("LewachBookTrading.Model.Address", b =>
+            modelBuilder.Entity("FriendRequest", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,35 +30,28 @@ namespace LewachBookTrading.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsDeclined")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Region")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StreetAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SubCity")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
+                    b.Property<int>("ReceiverId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId1")
+                    b.Property<int>("SenderId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("ReceiverId");
 
-                    b.ToTable("Address");
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("FriendRequests");
                 });
 
             modelBuilder.Entity("LewachBookTrading.Model.Book", b =>
@@ -144,6 +137,90 @@ namespace LewachBookTrading.Migrations
                     b.ToTable("Experiences");
                 });
 
+            modelBuilder.Entity("LewachBookTrading.Model.Journal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("JournalContent")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("JournalEntryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("JournalName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("JournalTagID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("JournalTagsId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("JournalUpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UsertId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JournalTagsId");
+
+                    b.HasIndex("UsertId");
+
+                    b.ToTable("Journals");
+                });
+
+            modelBuilder.Entity("LewachBookTrading.Model.JournalPhoto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("JournalId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhotoUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JournalId");
+
+                    b.ToTable("JournalPhotos");
+                });
+
+            modelBuilder.Entity("LewachBookTrading.Model.JournalTags", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("JorunalTag")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("JournalTags");
+                });
+
             modelBuilder.Entity("LewachBookTrading.Model.Like", b =>
                 {
                     b.Property<int>("Id")
@@ -206,6 +283,113 @@ namespace LewachBookTrading.Migrations
                     b.ToTable("Posts");
                 });
 
+            modelBuilder.Entity("LewachBookTrading.Model.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("CanAccessDatabase")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanActivateDeactivateUser")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanAnalyzeTrends")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanApproveRejectContent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanAssignRoles")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanBackupRestoreData")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanBanRestrictUsers")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanConductAudits")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanCreateContent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanCreateUser")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanCustomizeNotifications")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanDeleteContent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanDeleteUser")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanEditContent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanEditUser")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanGenerateReports")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanImportExportData")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanInstallUpdates")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanManageAccessControls")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanManageApiRateLimits")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanManageIntegrations")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanManageMediaFiles")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanManageSupportTickets")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanMonitorSecurityLogs")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanPerformDataCleanup")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanRespondToUserInquiries")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanScheduleDowntime")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanTrackSystemPerformance")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanUpdateSystemSettings")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanViewUserActivityLogs")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("LewachBookTrading.Model.Trade", b =>
                 {
                     b.Property<int>("Id")
@@ -245,8 +429,11 @@ namespace LewachBookTrading.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AddressID")
-                        .HasColumnType("int");
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -277,6 +464,21 @@ namespace LewachBookTrading.Migrations
                     b.Property<string>("Photo")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Region")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StreetAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubCity")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -285,18 +487,49 @@ namespace LewachBookTrading.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressID");
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("LewachBookTrading.Model.Address", b =>
+            modelBuilder.Entity("UserFriend", b =>
                 {
-                    b.HasOne("LewachBookTrading.Model.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.Navigation("User");
+                    b.Property<int>("FriendId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("UserId", "FriendId");
+
+                    b.HasIndex("FriendId");
+
+                    b.ToTable("UserFriends");
+                });
+
+            modelBuilder.Entity("FriendRequest", b =>
+                {
+                    b.HasOne("LewachBookTrading.Model.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("LewachBookTrading.Model.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("LewachBookTrading.Model.Book", b =>
@@ -346,6 +579,43 @@ namespace LewachBookTrading.Migrations
                     b.Navigation("FromUser");
 
                     b.Navigation("ToBook");
+                });
+
+            modelBuilder.Entity("LewachBookTrading.Model.Journal", b =>
+                {
+                    b.HasOne("LewachBookTrading.Model.JournalTags", null)
+                        .WithMany("Journals")
+                        .HasForeignKey("JournalTagsId");
+
+                    b.HasOne("LewachBookTrading.Model.User", "User")
+                        .WithMany("Journals")
+                        .HasForeignKey("UsertId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LewachBookTrading.Model.JournalPhoto", b =>
+                {
+                    b.HasOne("LewachBookTrading.Model.Journal", "Journal")
+                        .WithMany("JournalPhotos")
+                        .HasForeignKey("JournalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Journal");
+                });
+
+            modelBuilder.Entity("LewachBookTrading.Model.JournalTags", b =>
+                {
+                    b.HasOne("LewachBookTrading.Model.User", "User")
+                        .WithMany("JournalTags")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LewachBookTrading.Model.Like", b =>
@@ -403,13 +673,32 @@ namespace LewachBookTrading.Migrations
 
             modelBuilder.Entity("LewachBookTrading.Model.User", b =>
                 {
-                    b.HasOne("LewachBookTrading.Model.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressID")
+                    b.HasOne("LewachBookTrading.Model.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Address");
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("UserFriend", b =>
+                {
+                    b.HasOne("LewachBookTrading.Model.User", "Friend")
+                        .WithMany()
+                        .HasForeignKey("FriendId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("LewachBookTrading.Model.User", "User")
+                        .WithMany("Friends")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Friend");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LewachBookTrading.Model.Book", b =>
@@ -419,6 +708,16 @@ namespace LewachBookTrading.Migrations
                     b.Navigation("Trades");
                 });
 
+            modelBuilder.Entity("LewachBookTrading.Model.Journal", b =>
+                {
+                    b.Navigation("JournalPhotos");
+                });
+
+            modelBuilder.Entity("LewachBookTrading.Model.JournalTags", b =>
+                {
+                    b.Navigation("Journals");
+                });
+
             modelBuilder.Entity("LewachBookTrading.Model.Post", b =>
                 {
                     b.Navigation("Comments");
@@ -426,9 +725,20 @@ namespace LewachBookTrading.Migrations
                     b.Navigation("Likes");
                 });
 
+            modelBuilder.Entity("LewachBookTrading.Model.Role", b =>
+                {
+                    b.Navigation("Users");
+                });
+
             modelBuilder.Entity("LewachBookTrading.Model.User", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Friends");
+
+                    b.Navigation("JournalTags");
+
+                    b.Navigation("Journals");
 
                     b.Navigation("Likes");
 

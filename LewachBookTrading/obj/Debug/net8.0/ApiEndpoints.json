@@ -1,5 +1,42 @@
 [
   {
+    "ContainingType": "LewachBookTrading.Controllers.FrienshipController",
+    "Method": "AcceptFriendRequest",
+    "RelativePath": "AcceptFriendRequest",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "requestId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.FrienshipController",
+    "Method": "AddEmployee",
+    "RelativePath": "AddFriendship",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "UserId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "FriendId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "LewachBookTrading.Controllers.BookController",
     "Method": "AddBook",
     "RelativePath": "api/Book/AddBook",
@@ -101,6 +138,182 @@
         "Name": "Id",
         "Type": "System.Int32",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.JournalController",
+    "Method": "AddEmployee",
+    "RelativePath": "api/Journal/AddJournal",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "DTO",
+        "Type": "LewachBookTrading.DTOs.JournalDTO.AddJournalDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.JournalController",
+    "Method": "DeleteJournal",
+    "RelativePath": "api/Journal/DeleteJournal",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "JournalId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.JournalController",
+    "Method": "DeleteJournalPhoto",
+    "RelativePath": "api/Journal/DeleteJournalPhoto",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "journalPhotoId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.JournalController",
+    "Method": "GetJournalPhoto",
+    "RelativePath": "api/Journal/GetJournalPhoto",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "journalPhotoId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.JournalController",
+    "Method": "GetSpecificJournal",
+    "RelativePath": "api/Journal/GetSpecificJournal",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "journalId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.JournalController",
+    "Method": "GetJournalOfuser",
+    "RelativePath": "api/Journal/GetUserJournals",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userid",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.JournalController",
+    "Method": "UpdateJournal",
+    "RelativePath": "api/Journal/UpdateJournal",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "DTO",
+        "Type": "LewachBookTrading.DTOs.JournalDTO.UpdateJournalDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.JournalTagController",
+    "Method": "AddEmployee",
+    "RelativePath": "api/JournalTag/AddJournalType",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "DTO",
+        "Type": "LewachBookTrading.DTOs.JournalTypesDTO.AddJournalTypeDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.JournalTagController",
+    "Method": "DeleteJournalTag",
+    "RelativePath": "api/JournalTag/DeleteJournalTag",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "JournalTagId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.JournalTagController",
+    "Method": "GetJournalTagByUser",
+    "RelativePath": "api/JournalTag/GetJournalTagByUser",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "DTO",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.JournalTagController",
+    "Method": "UpdateJournalType",
+    "RelativePath": "api/JournalTag/UpdateJournalType",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "DTO",
+        "Type": "LewachBookTrading.DTOs.JournalTypesDTO.UpdateJournalTypeDTO",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -228,6 +441,80 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "LewachBookTrading.Controllers.RoleController",
+    "Method": "AddEmployee",
+    "RelativePath": "api/Role/AddRole",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "roleDTO",
+        "Type": "LewachBookTrading.DTOs.RoleDTO.AddRoleDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.RoleController",
+    "Method": "DeleteRole",
+    "RelativePath": "api/Role/DeleteRole",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Roleid",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.RoleController",
+    "Method": "GetAllRoles",
+    "RelativePath": "api/Role/GetAllRoles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.RoleController",
+    "Method": "GetSpecificRole",
+    "RelativePath": "api/Role/GetSpecificRole",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "roleId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.RoleController",
+    "Method": "UpdateRole",
+    "RelativePath": "api/Role/UpdateRole",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "roleDTO",
+        "Type": "LewachBookTrading.DTOs.RoleDTO.UpdateRoleDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "LewachBookTrading.Controllers.UserController",
     "Method": "AddEmployee",
     "RelativePath": "api/User/AddUser",
@@ -313,6 +600,101 @@
         "Name": "userDTO",
         "Type": "LewachBookTrading.DTOs.UserDTO.UpdateUserDTO",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.FrienshipController",
+    "Method": "DeclineFriendRequest",
+    "RelativePath": "DeclineFriendRequest",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "requestId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.FrienshipController",
+    "Method": "GetPendingRequests",
+    "RelativePath": "GetPendingRequests",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "UserId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.FrienshipController",
+    "Method": "RemoveFriendRequest",
+    "RelativePath": "RemoveFriendRequest",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "RequestId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "SenderId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.FrienshipController",
+    "Method": "SendFriendRequest",
+    "RelativePath": "SendFriendRequest",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sender",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "receiver",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "LewachBookTrading.Controllers.FrienshipController",
+    "Method": "RemoveFriendship",
+    "RelativePath": "Unfriend",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "UserId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "FriendId",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

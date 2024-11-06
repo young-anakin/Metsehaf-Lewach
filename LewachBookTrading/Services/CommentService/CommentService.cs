@@ -55,5 +55,7 @@ namespace LewachBookTrading.Services.CommentService
 
             return comment;
         }
+
+        public async Task<Comment> UpdateComment(Update)
     }
 }
