@@ -41,5 +41,19 @@ namespace LewachBookTrading.Services.CommentService
             return comment;
 
         }
+
+        public async Task<Comment> DeleteComment(int Id)
+        {
+            var comment = await _context.Comments.Where(c => c.Id == Id).FirstOrDefaultAsync();
+            if (comment == null)
+            {
+                throw (new Exception("No Such Comment"));
+            }
+
+            _context.Comments.Remove(comment);
+            await _context.SaveChangesAsync();
+
+            return comment;
+        }
     }
 }

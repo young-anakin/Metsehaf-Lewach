@@ -31,5 +31,23 @@ namespace LewachBookTrading.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Can't Add Comment" });
             }
         }
+
+        [HttpDelete("DeleteComment")]
+
+        public async Task<ActionResult> DeleteComment(int Id)
+        {
+            try
+            {
+
+                var response = await _commentService.DeleteComment(Id);
+                return Ok(response);
+
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "No Such Comment" });
+            }
+
+        }
     }
 }

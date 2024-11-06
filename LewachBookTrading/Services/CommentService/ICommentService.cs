@@ -6,5 +6,6 @@ namespace LewachBookTrading.Services.CommentService
     public interface ICommentService
     {
         Task<Comment> AddComment(AddCommentDTO addCommentDTO);
+        Task<Comment> DeleteComment(int Id);
     }
 }
