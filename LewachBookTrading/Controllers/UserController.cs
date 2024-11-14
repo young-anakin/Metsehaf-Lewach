@@ -102,9 +102,23 @@ namespace LewachBookTrading.Controllers
             {
                 return Conflict(new ErrorResponse { Message = ex.Message });
             }
+            catch (DbUpdateException ex)
+            {
+                // Handle database update related exceptions specifically
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Database update error: " + ex.InnerException?.Message });
+            }
+            catch (NullReferenceException ex)
+            {
+                // Handle null reference exceptions
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Null reference error: " + ex.Message });
+            }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "Internal Server Error" });
+                // Log the exception details for further analysis
+                // Use your logging framework here
+                Console.WriteLine(ex); // or a logger
+
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { Message = "An unexpected error occurred. Please try again later." });
             }
         }
 

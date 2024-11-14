@@ -71,14 +71,23 @@ namespace LewachBookTrading.Services.UserService
                 await _context.SaveChangesAsync();
                 return user;
             }
-            if (user == null)
-            {
-                // Handle the case where the role is not found
-                throw new Exception("Role not found.");
-            }
+
             return null;
 
         }
+        //public async Task<User> GetUser(int id)
+        //{
+        //    var user = await _context.Users.Include(u => u.Posts).Include(u => u.Likes).Include(u => u.Comments)
+        //        .Where(u => u.Id == id).FirstOrDefaultAsync();
+
+        //    if (user == null)
+        //    {
+        //        // Handle the case where the role is not found
+        //        throw new Exception("Role not found.");
+        //    }
+        //    return null;
+
+        //}
         public async Task<DisplayUserDTO> GetUser(int id)
         {
             // Fetch the user and include their friends
@@ -86,6 +95,7 @@ namespace LewachBookTrading.Services.UserService
                 .Include(u => u.Role)
                 .Include(u => u.Friends)
                 .ThenInclude(f => f.Friend)  // Includes Friend details in each UserFriend entry
+                .Include(u => u.Posts).Include(u => u.Likes).Include(u => u.Comments)
                 .Where(u => u.Id == id)
                 .FirstOrDefaultAsync();
 
@@ -139,11 +149,14 @@ namespace LewachBookTrading.Services.UserService
 
         public async Task<List<User>> GetAllUsers()
         {
+
             var user = await _context.Users
                 //.Include(u => u.Journals)
 
                 .Include(u => u.JournalTags)
                 .Include(u => u.Role)
+                .Include(u => u.Posts).Include(u => u.Likes).Include(u => u.Comments)
+
 
                 .ToListAsync();
             if (user != null)

@@ -42,6 +42,11 @@ namespace LewachBookTrading.Model
 
         public DateTime UpdatedAt { get; set; }
 
+        public ICollection<Post> Posts { get; set; } = new List<Post>();
+
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<Like> Likes { get; set; } = new List<Like>();
+
         public List<JournalTags>? JournalTags { get; set; }
 
         public List<Journal>? Journals { get; set; }
@@ -53,6 +58,5 @@ namespace LewachBookTrading.Model
         public Role? Role { get; set; }
 
         public ICollection<UserFriend> Friends { get; set; } = new List<UserFriend>();
-
     }
 }
